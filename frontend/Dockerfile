@@ -13,6 +13,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
     && su taiga -c "cd ~ \
         && git clone https://github.com/taigaio/taiga-front-dist.git taiga-front-dist \
         && cd taiga-front-dist \
-        && git checkout stable"
+        && git checkout stable \
+        && cp /home/taiga/taiga-front-dist/dist/conf.example.json /home/taiga/taiga-front-dist/dist/conf.json"
 
 COPY default.conf /etc/nginx/conf.d/default.conf
+
+COPY docker-entrypoint.sh /
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
+
+CMD ["nginx"]
