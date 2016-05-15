@@ -3,6 +3,8 @@ set -e
 
 function config {
     DEBUG=${DEBUG:-False}
+    ADMIN_NAME=${ADMIN_NAME:-Admin}
+    ADMIN_EMAIL=${ADMIN_EMAIL:-example@example.com}
     TEMPLATE_DEBUG=${TEMPLATE_DEBUG:-False}
     PUBLIC_REGISTER_ENABLED=${PUBLIC_REGISTER_ENABLED:-False}
     HOST_NAME=${HOST_NAME:-localhost}
@@ -15,6 +17,10 @@ function config {
     DB_HOST=${DB_HOST}
 
     echo "from .development import *
+
+ADMINS = (
+    ('${ADMIN_NAME}', '${ADMIN_EMAIL}'),
+)
 
 DEBUG = ${DEBUG}
 TEMPLATE_DEBUG = ${TEMPLATE_DEBUG}
