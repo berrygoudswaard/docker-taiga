@@ -1,0 +1,39 @@
+postgres:
+    image: postgres
+    volumes:
+        - $PWD/data/postgres:/var/lib/postgresql/data
+    environment:
+        - POSTGRES_USER=taiga
+        - POSTGRES_PASSWORD=taiga
+
+taiga-backend:
+    build: $PWD/backend
+    #image: berrygoudswaard/taiga-backend
+    environment:
+        - PUBLIC_REGISTER_ENABLED=True
+        - HOSTNAME=localhost
+        - SECRET_KEY=taiga
+        - DEFAULT_FROM_EMAIL=example@example.com
+        - SERVER_EMAIL=example@example.com
+        - DB_USER=taiga
+        - DB_PASS=taiga
+        - DB_HOST=postgres
+    ports:
+        - 8000:8000
+    volumes:
+        - $PWD/data/taiga/static:/home/taiga/static
+        - $PWD/data/taiga/media:/home/taiga/media
+    links:
+        - postgres:postgres
+
+taiga-frontend:
+    build: $PWD/frontend
+    #image: berrygoudswaard/taiga-frontend
+    ports:
+        - 80:80
+    environment:
+        - API_HOST=localhost
+    volumes_from:
+        - taiga-backend
+    links:
+        - taiga-backend:taiga-backend
